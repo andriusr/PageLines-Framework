@@ -53,32 +53,15 @@ class PageLinesFootCols extends PageLinesSection {
 	function section_template($clone_id) {
 
 		$default = array();
-
-		if(ploption('footer_logo') && VPRO)
-			$default[] = sprintf( '<a href="%s" class="home" title="%s"><img src="%s" alt="%s"/></a>',  home_url(),  __('Home', 'pagelines'), ploption('footer_logo'),  get_bloginfo('name') );
-		else
-			$default[] = sprintf( '<h3 class="site-title"><a class="home" href="%s" title="%s">%s</a></h3>', home_url(), __('Home', 'pagelines'), get_bloginfo('name') );
-
-		$default[] = sprintf( '<h3 class="widget-title">%s</h3>%s',
-				__('Pages','pagelines'),
-				wp_nav_menu( array('menu_class' => 'footer-links list-links', 'theme_location'=>'footer_nav', 'depth' => 1, 'echo' => false) )
-			);
-
-		$default[] = sprintf( '<h3 class="widget-title">%s</h3><ul class="latest_posts">%s</ul>',
-				__('The Latest','pagelines'),
-				$this->recent_post()
-			);
-
-		$default[] = sprintf( '<h3 class="widget-title">%s</h3><div class="findent footer-more">%s</div>',
-				__('More','pagelines'),
-				ploption('footer_more')
-			);
-
 		$default[] = sprintf( '<div class="findent terms">%s</div>',
-				ploption('footer_terms')
+				'&nbsp;'
 			);
-
-
+			      
+		$default[] = sprintf( '<div class="findent terms" style ="text-align: center;">%s&nbsp;%s</div>',
+			 ploption('footer_terms'),
+				wp_nav_menu( array('menu_class' => 'inline-list', 'theme_location'=>'footer_nav', 'depth' => 1, 'echo' => false) )
+			      );	 
+			
 		ob_start(); // dynamic sidebar always outputs
 
 		if (!dynamic_sidebar($this->name) ) {
