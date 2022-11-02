@@ -86,6 +86,41 @@ class PLheroUnit extends PageLinesSection {
 						),
 					),
 				),
+				
+/*				'pagelines_herounit_cta_2' => array(
+					'type'		=> 'multi_option',
+					'title'		=> __('Hero Download Button', 'pagelines'),
+					'shortexp'	=> __('Enter the options for the Hero download button', 'pagelines'),
+					'selectvalues'	=> array(
+						'herounit_button_link_2' => array(
+							'type' => 'text',
+							'inputlabel' => 'Download link destination (URL - Required)',
+						),
+						'herounit_button_text_2' => array(
+							'type' 			=> 'text',
+							'inputlabel' 	=> 'Hero Button Text',
+						),
+						'herounit_button_target_2' => array(
+							'type'			=> 'check',
+							'default'		=> false,
+							'inputlabel'	=> 'Open link in new window.',
+						),
+						'herounit_button_theme_2' => array(
+							'type'			=> 'select',
+							'default'		=> false,
+							'inputlabel'	=> 'Select Button Color',
+							'selectvalues'	=> array(
+								'primary'	=> array('name' => 'Blue'),
+								'warning'	=> array('name' => 'Orange'),
+								'important'	=> array('name' => 'Red'),
+								'success'	=> array('name' => 'Green'),
+								'info'		=> array('name' => 'Light Blue'),
+								'reverse'	=> array('name' => 'Grey'),
+							),
+						),
+					),
+				), */
+				
 				'pagelines_herounit_widths' => array(
 					'type'		=> 'multi_option',
 					'title'		=> __('Content Widths', 'pagelines'),
@@ -151,6 +186,12 @@ class PLheroUnit extends PageLinesSection {
 		$hero_butt_target = ( ploption( 'herounit_button_target', $this->oset ) ) ? ' target="_blank"': '';
 		$hero_butt_theme = ploption( 'herounit_button_theme', $this->oset );
 
+/*		$hero_butt_link_2 = ploption( 'herounit_button_link_2', $this->oset );
+		$hero_butt_text_2 = ploption( 'herounit_button_text_2', $this->oset );
+		$hero_butt_target_2 = ( ploption( 'herounit_button_target_2', $this->oset ) ) ? ' target="_blank"': '';
+		$hero_butt_theme_2 = ploption( 'herounit_button_theme_2', $this->oset ); */
+
+
    		if($hero_title)	{ ?>
 
 	   	<div class="pl-hero-wrap row">
@@ -168,7 +209,8 @@ class PLheroUnit extends PageLinesSection {
 		  				printf('<p>%s</p>',$hero_tag);
 
 	  			    if($hero_butt_link)
-					printf('<a %s class="btn btn-%s btn-large" href="%s">%s</a> ', $hero_butt_target, $hero_butt_theme, $hero_butt_link, $hero_butt_text);
+					printf('<a %s class="btn btn-%s btn-large" href="%s">%s</a><p></p> ', $hero_butt_target, $hero_butt_theme, $hero_butt_link, $hero_butt_text);
+/*					printf('<a %s class="btn btn-%s btn-large" href="%s">%s</a>', $hero_butt_target_2, $hero_butt_theme_2, $hero_butt_link_2, $hero_butt_text_2); */
 	  			?>
 			</div>
 
