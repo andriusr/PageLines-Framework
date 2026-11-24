@@ -6,8 +6,6 @@
 	Description: A universal widgetized sidebar
 	Class Name: UniversalSidebar
 	Workswith: sidebar1, sidebar2, sidebar_wrap, templates, main, header, morefoot
-	Edition: pro
-	Persistant: true
 */
 
 /**
@@ -21,7 +19,7 @@ class UniversalSidebar extends PageLinesSection {
 	/**
 	* Section template.
 	*/
-   function section_template($clone_id) {
+   function section_template() {
 	 	 pagelines_draw_sidebar($this->id, $this->name);
 	}
 

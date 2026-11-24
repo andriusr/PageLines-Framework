@@ -30,7 +30,7 @@ class NavXTBreadcrumbs extends PageLinesSection {
 	/**
 	* Section template
 	*/
-	function section_template($clone_id) {
+	function section_template($clone_id = null) {
 		if( function_exists( 'bcn_display' ) )
 			printf( '<div class="pl_breadcrumb" style ="text-align: center;">%s</div>', $this->get_breadcrumb() );
 	}

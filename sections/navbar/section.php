@@ -20,7 +20,7 @@ class PLNavBar extends PageLinesSection {
 
 	var $default_limit = 2;
 
-	function section_head( $clone_id ) {
+	function section_head() {
 		?>
 			<!--[if IE 8]>
 				<style>
@@ -196,7 +196,7 @@ class PLNavBar extends PageLinesSection {
 	/**
 	* Section template.
 	*/
-   function section_template( $clone_id, $location = '' ) {
+  	function section_template( $clone_id = null, $location = '' ) {
 
 	$passive = ( $location == 'passive' ) ? true : false;
 

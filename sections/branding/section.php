@@ -19,7 +19,7 @@ class PageLinesBranding extends PageLinesSection {
 	/**
 	* Section template.
 	*/
-   function section_template( $clone_id ) {
+   function section_template() {
 
 			printf('<div class="branding_wrap fix">');
 

@@ -5,9 +5,7 @@
 	Author URI: http://www.pagelines.com
 	Description: Shows full width widgetized sidebar.
 	Class Name: FullWidthSidebar
-	Edition: pro
 	Workswith: templates, footer, morefoot
-	Persistant: true
 */
 
 /**
@@ -21,7 +19,7 @@ class FullWidthSidebar extends PageLinesSection {
 	/**
 	* Section template.
 	*/
-   function section_template($clone_id) {
+   function section_template() {
 		 pagelines_draw_sidebar($this->id, $this->name);
 	}
 }

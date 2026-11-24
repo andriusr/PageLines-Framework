@@ -29,7 +29,7 @@ class ScrollSpy extends PageLinesSection {
 	/**
 	* Section template.
 	*/
-	function section_template($clone_id) {
+	function section_template() {
 
 		global $post;
 

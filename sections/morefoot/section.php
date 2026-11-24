@@ -6,8 +6,6 @@
 	Description: Three widgetized sidebars above footer
 	Class Name: PageLinesMorefoot
 	Workswith: morefoot, footer
-	Edition: pro
-	Persistant: true
 */
 
 /**
@@ -27,25 +25,24 @@ class PageLinesMorefoot extends PageLinesSection {
 		$this->master_array();
 
 		// Register Section Sidebars
-		foreach($this->master as $key => $i){
-
-			pagelines_register_sidebar(
-				array(
-					'name'			=> $i['name'],
-					'description'	=> $i['description'],
-					'before_widget' => '<div id="%1$s" class="%2$s widget fix"><div class="widget-pad">',
-				    'after_widget' => '</div></div>',
-				    'before_title' => '<h3 class="widget-title">',
-				    'after_title' => '</h3>'
-				)
-			);
+		foreach ( $this->master as $key => $i )
+		{
+			pl_register_sidebar( array(
+				'id'            => sanitize_title( $i['name'] ),
+				'name'          => $i['name'],
+				'description'   => $i['description'],
+				'before_widget' => '<div id="%1$s" class="%2$s widget fix"><div class="widget-pad">',
+				'after_widget'  => '</div></div>',
+				'before_title'  => '<h3 class="widget-title">',
+				'after_title'   => '</h3>'
+			) );
 		}
 	}
 
 	/**
 	* Section template.
 	*/
-   function section_template($clone_id) {
+   function section_template() {
 
 		$grid_args = array(
 			'data'		=> 'array_callback',

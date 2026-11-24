@@ -6,7 +6,6 @@
 	Description: A 5 column widgetized sidebar in the footer
 	Class Name: PageLinesFootCols
 	Workswith: morefoot, footer
-	Persistant: true
 */
 
 /**
@@ -23,15 +22,15 @@ class PageLinesFootCols extends PageLinesSection {
 	/**
 	* PHP that always loads no matter if section is added or not.
 	*/
-	function section_persistent(){
-
+	function section_persistent()
+	{
 		$per_row = (ploption('footer_num_columns')) ? ploption('footer_num_columns') : 5;
 
 		$this->markup_start = sprintf( '<div class="pp%s footcol"><div class="footcol-pad">', $per_row );
 		$this->markup_end 	= '</div></div>';
 
-
-		pagelines_register_sidebar(array(
+		pl_register_sidebar( array(
+			'id'            => $this->id,
 			'name'=>$this->name,
 			'description'	=> __('Use this sidebar if you want to use widgets in your footer columns instead of the default.', 'pagelines'),
 		    'before_widget' => $this->markup_start,
@@ -50,7 +49,7 @@ class PageLinesFootCols extends PageLinesSection {
 	/**
 	* Section template.
 	*/
-	function section_template($clone_id) {
+	function section_template() {
 
 		$default = array();
 		$default[] = sprintf( '<div class="findent terms">%s</div>',
