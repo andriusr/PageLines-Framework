@@ -189,21 +189,20 @@ function ajax_save_template_map() {
  * @since   ...
  *
  */
-add_action( 'wp_ajax_pagelines_ajax_save_option', 'pagelines_ajax_save_option_callback' );
-function pagelines_ajax_save_option_callback() {
+function pagelines_ajax_save_option_callback()
+{
+	$data = filter_input_array(INPUT_POST, array(
+		'option_name'  => array(),
+		'option_value' => array()
+	));
 
-	if( ! current_user_can( 'edit_theme_options' ) )
-		die( 'Cheatin huh?' );
-    /** This is how you get access to the database */
-	global $wpdb;
-
-	$option_name = $_POST['option_name'];
-	$option_value = $_POST['option_value'];
-
-	update_option( $option_name, $option_value );
+	// validate the capability and the option to be updated
+	if ( current_user_can('edit_theme_options') && in_array($data['option_name'], pl_option_keys()) )
+		update_option( $data['option_name'], $data['option_value'] );
 
 	die();
 }
+add_action( 'wp_ajax_pagelines_ajax_save_option', 'pagelines_ajax_save_option_callback' );
 
 /**
  * Inline Help
@@ -339,10 +338,9 @@ function pl_page_show_columns($name) {
 add_action( 'admin_init', 'pagelines_set_versions' );
 function pagelines_set_versions() {
 	if ( current_user_can( 'edit_themes' ) ) {
-		if( defined( 'PL_LESS_DEV' ) && PL_LESS_DEV ) {
-			delete_transient( 'pagelines_sections_cache' );
+		delete_transient( 'pagelines_sections_cache' );
+		if( defined( 'PL_LESS_DEV' ) && PL_LESS_DEV )
 			PageLinesRenderCSS::flush_version( false );
-		}
 	}
 	set_theme_mod( 'pagelines_version', pl_get_theme_data( get_template_directory(), 'Version' ) );
 	set_theme_mod( 'pagelines_child_version', pl_get_theme_data( get_stylesheet_directory(), 'Version' ) );
