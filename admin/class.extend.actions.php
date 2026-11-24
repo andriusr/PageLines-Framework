@@ -9,7 +9,7 @@
 
  class PageLinesExtendActions {
 
-
+	public object $ui;
 
 	/**
 	*

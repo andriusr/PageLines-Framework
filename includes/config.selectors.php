@@ -10,7 +10,7 @@
  *  @since 2.0.b6
  *
  */
-
+#[\AllowDynamicProperties]
 class PageLinesCSSGroups{
 
 	/**

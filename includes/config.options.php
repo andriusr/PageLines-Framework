@@ -11,7 +11,7 @@
  *  @since 2.0.b3
  *
  */
-
+#[\AllowDynamicProperties]
 class PageLinesOptionsArray {
 
 	/**

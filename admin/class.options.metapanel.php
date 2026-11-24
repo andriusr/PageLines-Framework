@@ -10,6 +10,7 @@
  *  @since 4.0
  *
  */
+#[\AllowDynamicProperties]
 class PageLinesMetaPanel {
 
 	var $tabs = array();	// Controller for drawing meta options

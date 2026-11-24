@@ -1,4 +1,6 @@
 <?php
+
+#[\AllowDynamicProperties]
 class PageLinesUpdateCheck {
 
     function __construct( $version = null ){

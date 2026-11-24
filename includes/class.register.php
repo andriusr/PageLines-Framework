@@ -7,7 +7,7 @@
  * @author		PageLines
  * @copyright	2011 PageLines
  */
-
+#[\AllowDynamicProperties]
 class PageLinesRegister {
 
 	function __construct() {

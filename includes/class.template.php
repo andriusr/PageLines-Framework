@@ -10,6 +10,7 @@
  *  @since 4.0
  *
  */
+#[\AllowDynamicProperties]
 class PageLinesTemplate {
 
 	var $id;		// Root id for section.

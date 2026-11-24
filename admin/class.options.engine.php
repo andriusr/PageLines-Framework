@@ -11,6 +11,8 @@
  *
  * @version     2.2 - implement 'docstitle' setting ... see get_option_title()
  */
+
+#[\AllowDynamicProperties]
 class OptEngine {
 
     /**

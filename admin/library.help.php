@@ -7,7 +7,7 @@
  *
  * @since 2.0.b21
  */
-
+#[\AllowDynamicProperties]
 class PageLines_Inline_Help {
 
 

@@ -8,6 +8,7 @@
  * @subpackage  Sections
  * @since       4.0
  */
+#[\AllowDynamicProperties]
 class PageLinesSection {
 
 	var $id;		// Root id for section.

@@ -9,6 +9,7 @@
  *
  * @since       1.0
  */
+#[\AllowDynamicProperties]
 class PageLinesLayout {
 
 	// BUILD THE PAGELINES OBJECT

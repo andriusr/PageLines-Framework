@@ -11,7 +11,7 @@
  * @package PageLines Framework
  * @since 2.0
  */
-
+#[\AllowDynamicProperties]
  class PagelinesExtensions {
 
  	function __construct() {

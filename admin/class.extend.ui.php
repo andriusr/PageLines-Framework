@@ -9,7 +9,7 @@
  *  @since 2.0.b9
  *
  */
-
+#[\AllowDynamicProperties]
 class PageLinesExtendUI {
 
 
