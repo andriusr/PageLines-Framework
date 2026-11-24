@@ -60,8 +60,9 @@ class PageLinesRegister {
 		* If cache exists load into $sections array
 		* If not populate array and prime cache
 		*/
-		if ( ! $sections = get_transient( 'pagelines_sections_cache' ) ) {
-
+		$sections = get_transient( 'pagelines_sections_cache' );
+		if ( $sections == false ) {
+			$sections = [];
 			foreach ( $section_dirs as $type => $dir ) {
 				$sections[$type] = $this->pagelines_getsections( $dir, $type );
 			}
@@ -294,27 +295,33 @@ class PageLinesRegister {
 		$sidebars = array(
 
 			'sb_primary' => array(
+				'id' => 'pagelines_primary',
 				'name'	=>	__( 'Primary Sidebar', 'pagelines' ),
 				'description'	=>	__( 'The main widgetized sidebar.', 'pagelines')
 			),
 			'sb_secondary' => array(
+				'id' => 'pagelines_secondary',
 				'name'	=>	sprintf( '%s%s', __( 'Secondary Sidebar', 'pagelines' ), ( !VPRO ) ? ' (Pro Only)' : '' ),
 				'description'	=>	__( 'The secondary widgetized sidebar for the theme.', 'pagelines')
 			),
 			'sb_tertiary' => array(
+				'id' => 'pagelines_tertiary',
 				'name'	=>	__( 'Tertiary Sidebar', 'pagelines' ),
 				'description'	=>	__( 'A 3rd widgetized sidebar for the theme that can be used in standard sidebar templates.', 'pagelines')
 			),
 			'sb_universal' => array(
+				'id' => 'pagelines_universal',
 				'name'	=>	__( 'Universal Sidebar', 'pagelines' ),
 				'description'	=>	__( 'A universal widgetized sidebar', 'pagelines'),
 				'pro'	=> true
 			),
 			'sb_fullwidth' => array(
+				'id' => 'pagelines_fullwidth',
 				'name'	=>	__( 'Full Width Sidebar', 'pagelines' ),
 				'description'	=>	__( 'Shows full width widgetized sidebar.', 'pagelines')
 			),
 			'sb_content' => array(
+				'id' => 'pagelines_content',
 				'name'	=>	__( 'Content Sidebar', 'pagelines' ),
 				'description'	=>	__( 'Displays a widgetized sidebar inside the main content area. Set it up in the widgets panel.', 'pagelines')
 			),
@@ -322,7 +329,7 @@ class PageLinesRegister {
 		foreach( $sidebars as $key => $sidebar ) {
 			if ( isset( $sidebar['pro'] ) && ! VPRO )
 				continue;
-			pagelines_register_sidebar( pagelines_standard_sidebar( $sidebar['name'], $sidebar['description'] ) );
+			pagelines_register_sidebar( pagelines_standard_sidebar( $sidebar['id'], $sidebar['name'], $sidebar['description'] ) );
 		}
 	}
 

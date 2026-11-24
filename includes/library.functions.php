@@ -1139,7 +1139,7 @@ function pagelines_register_sidebar( $args, $priorty = null )
  */
 function pl_register_sidebar( $args )
 {
-	$base = pagelines_standard_sidebar( 'name', 'description' ); // defaults to merge with
+	$base = pagelines_standard_sidebar( 'id', 'name', 'description' ); // defaults to merge with
 	$args = array_merge( $base, $args );
 
 	// migrate sidebars' widgets from assigned index key to declared id
