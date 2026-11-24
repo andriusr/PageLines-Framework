@@ -25,7 +25,7 @@ class PageLinesLess {
 		global $less_vars;
 
 		// The LESS Class
-		$this->lparser = new plessc();
+		$this->lparser = new lessc();
 
 		$this->base_color = pl_hashify( pl_base_color() );
 
@@ -95,9 +95,9 @@ class PageLinesLess {
 		return $this->raw_parse($lesscode, $type);
 	}
 
-	private function raw_parse( $pless, $type ) {
-
-		$pless = $this->add_constants( '' ) . $this->add_bootstrap() . $pless;
+	private function raw_parse( $pless, $type )
+	{
+		$pless = $this->add_constants() . $this->add_bootstrap() . $pless;
 		try {
 			$css = $this->lparser->compile( $pless );
 		}
@@ -111,18 +111,21 @@ class PageLinesLess {
 		return $css;
 	}
 
-	private function add_bootstrap( ) {
-		$less = '';
-
-		$less .= PageLinesLess::load_less_file( 'variables' );
-		$less .= PageLinesLess::load_less_file( 'colors' );
-		$less .= PageLinesLess::load_less_file( 'mixins' );
-
-		return $less;
+	private function add_bootstrap()
+	{
+		return pl_load_less_files( array('variables','colors','mixins') );
 	}
 
-	public static function load_less_file( $file ) {
-
+	/**
+	 * [load_less_file description]
+	 *
+	 * @deprecated	2.4.6 - use pl_load_less_file()
+	 * 
+	 * @param  [type] $file [description]
+	 * @return [type]       [description]
+	 */
+	static function load_less_file( $file )
+	{
 		$file 	= sprintf( '%s.less', $file );
 		$parent = sprintf( '%s/%s', PL_CORE_LESS, $file );
 		$child 	= sprintf( '%s/%s', PL_CHILD_LESS, $file );
@@ -146,7 +149,7 @@ class PageLinesLess {
 
 	}
 
-	private function add_constants( $pless ) {
+	private function add_constants( $pless = '' ) {
 
 		$prepend = '';
 
@@ -371,4 +374,58 @@ function pl_hashify( $color ){
 	$clean_hex = str_replace('#', '', $color);
 
 	return sprintf('#%s', $clean_hex);
+}
+
+/**
+ * Get the first found less file
+ * Checks child theme first, then parent
+ *
+ * @since	2.4.6
+ * 
+ * @param  [type] $filename [description]
+ * @return [type]           [description]
+ */
+function pl_locate_less( $filename )
+{
+	if ( path_is_absolute( $filename ) && file_exists( $filename ) )
+		return $filename;
+	else
+		return locate_template( array("less/$filename","less/$filename.less") );
+}
+
+/**
+ * [pl_load_less_file description]
+ *
+ * @since	2.4.6
+ * 
+ * @param  [type] $filename [description]
+ * @return [type]           [description]
+ */
+function pl_load_less_file( $filename )
+{
+	return pl_file_get_contents( pl_locate_less( $filename ) );
+}
+
+/**
+ * [pl_load_less_files description]
+ *
+ * @since	2.4.6
+ * 
+ * @param  array	$files	array of filenames array( 'reset','colors','other' )
+ * @return array/string		associative array of filename => loaded less,
+ * 							or a string of all files' contents	
+ */
+function pl_load_less_files( $files, $as = 'string' )
+{
+	$loaded = array_map( 'pl_load_less_file', $files );
+
+	if ( 'array' == $as )
+	{
+		// convert to associative
+		// use filenames as keys
+		return array_combine( $files, $loaded );
+	}
+
+	elseif ( 'string' == $as )
+		return join( "\n", $loaded );
 }
