@@ -46,7 +46,7 @@ function pl_ehtml($text) {
  *
  */
 function pl_html($text) {
-	return trim( htmlentities( stripslashes( $text ), ENT_QUOTES, 'UTF-8' ) );
+	return trim( htmlentities( stripslashes( (string)$text ), ENT_QUOTES, 'UTF-8' ) );
 }
 
 

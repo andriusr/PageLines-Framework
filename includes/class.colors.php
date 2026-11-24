@@ -76,7 +76,7 @@ class PageLinesColor {
      */
 	function get_color( $mode = null, $difference = '10%', $alt = null, $id = null){
 
-		$alt = str_replace('#', '', $alt);
+		$alt = str_replace('#', '', (string)$alt);
 
 		if(is_string($difference)){
 			$dp = (int) str_replace('%', '', $difference);
