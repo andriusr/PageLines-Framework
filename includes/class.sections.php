@@ -168,7 +168,7 @@ class PageLinesSection {
      *
      * @since   ...
      */
-	function section_template($clone_id) {
+	function section_template() {
 		die('function PageLinesSection::section_template() must be over-ridden in a sub-class.');
 	}
 
@@ -398,7 +398,7 @@ class PageLinesSection {
      *
      * @since   ...
      */
-	function section_head($clone_id){}
+	function section_head(){}
 
 
     /**
@@ -640,80 +640,76 @@ class PageLinesSection {
 	/**
      * Backports from v3. Wrapper for ploption.
      *
+     * ploption
+     * $this->opt
+     * ...
+     *
      * @package     PageLines Framework
      * @subpackage  Sections
      * @since       2.4.2
      *
-     * @param       $option
+     * @param       $key
+     * @param 		$oset - @since 2.4.5.2
      */
-	function opt( $option ) {
-		if( isset( $this->oset ) )
-			return ploption( $option, $this->oset );
-		else
-			return ploption( $option );
+	function opt( $key, $oset = false )
+	{
+		$o = is_array( $oset ) ? $oset : array();
+
+		if ( isset( $this->oset ) && is_array( $this->oset ) )
+			$o = array_merge( $this->oset, $o );
+
+		return ploption( $key, $o );
 	}
-}
-/********** END OF SECTION CLASS  **********/
+} // PageLinesSection
 
-/**
- * PageLines Section Factory (class)
- *
- * Singleton that registers and instantiates PageLinesSection classes.
- *
- * @package     PageLines Framework
- * @subpackage  Sections
- * @since       1.0.0
- */
-class PageLinesSectionFactory {
-	var $sections  = array();
-	var $unavailable_sections  = array();
 
+class PageLinesSectionFactory
+{
 
 	/**
-     * Constructor
-     *
-     * @TODO document
-     */
-	function __contruct() { }
+	 * Sections container
+	 * Needs to stay public for backwards compatibility
+	 * @var array
+	 */
+	public $sections = array();
 
+	private static $instance;
 
-    /**
-     * Register
-     *
-     * @since   ...
-     *
-     * @param   $section_class
-     * @param   $args
-     *
-     * @TODO document
-     */
-	function register($section_class, $args) {
+	protected function __construct() {}
 
-		if(class_exists($section_class))
-			$this->sections[$section_class] = new $section_class( $args );
+	public static function get_instance()
+	{
+		if ( is_null( self::$instance ) )
+			self::$instance = new self();
 
-		/** Unregisters version-controlled sections */
-		if(!VPRO && $this->sections[$section_class]->settings['version'] == 'pro') {
-			$this->unavailable_sections[] = $this->sections[$section_class];
-			$this->unregister($section_class);
-		}
+		return self::$instance;
 	}
 
-
-    /**
-     * Unregister
-     *
-     * @since   ...
-     *
-     * @param   $section_class
-     * @TODO document
-     */
-	function unregister($section_class) {
-		if ( isset($this->sections[$section_class]) )
-			unset($this->sections[$section_class]);
+	function register( $section_class, $args )
+	{
+		if ( class_exists( $section_class ) && is_subclass_of( $section_class, 'PageLinesSection' ) )
+			$this->sections[ $section_class ] = new $section_class( $args );
 	}
 
-}
+	function unregister( $section_class )
+	{
+		unset( $this->sections[ $section_class ] );
+	}
+
+	function get_section( $class )
+	{
+		if ( isset( $this->sections[ $class ] ) )
+			return $this->sections[ $class ];
+		else
+			return false;
+	}
+
+	function get_sections()
+	{
+		return $this->sections;
+	}
+
+} // PageLinesSectionFactory
 
 /**
  * Load Section Persistent
@@ -796,24 +792,24 @@ function get_unavailable_section_areas(){
  *
  * @return  string
  */
-function setup_section_notify( $section, $text, $url = null, $ltext = null, $tab = null){
+function setup_section_notify( $section, $text, $url = null, $atext = null, $tab = null )
+{
+	if ( !current_user_can('edit_theme_options') )
+		return;
 
-
-	if(current_user_can('edit_themes')){
+	$title     = "<strong><i class='icon-pencil'></i> $section->name</strong>";
+	$tab       = ( !isset( $tab) && isset($section->tabID)) ? $section->tabID : $tab;
+	$url       = ( isset( $url ) ) ? $url : pl_meta_set_url( $tab );
+	$link_text = ( isset( $atext ) ) ? $atext : __('Set Meta', 'pagelines');
+	$link      = "<a href='$url'>$link_text &rarr;</a>";
 	
-		$banner_title = sprintf('<strong><i class="icon-pencil"></i> %s</strong>', $section->name);
-		
-		$tab = ( !isset( $tab) && isset($section->tabID)) ? $section->tabID : $tab;
-
-		$url = (isset($url)) ? $url : pl_meta_set_url( $tab );
-
-		$link_text = (isset($ltext)) ? $ltext : __('Set Meta', 'pagelines');
-
-		$link = sprintf('<a href="%s">%s</a>', $url, $link_text . ' &rarr;');
-		
-		return sprintf('<div class="setup-section"><div class="setup-section-pad">%s <br/><small class="banner_text subhead">%s %s</small></div></div>', $banner_title, $text, $link);
-	}
-
+	return <<<HTML
+<div class="setup-section">
+	<div class="setup-section-pad">$title <br/>
+	<small class="banner_text subhead">$text $link</small>
+	</div>
+</div>
+HTML;
 }
 
 /**
@@ -831,4 +827,18 @@ function splice_section_slug( $slug ){
 	$clone_id = (isset($pieces[1])) ? $pieces[1] : 1;
 	
 	return array('section' => $section, 'clone_id' => $clone_id);
+}
+
+
+/**
+ * [pl_get_sections description]
+ *
+ * @since	2.4.6
+ * 
+ * @return [type] [description]
+ */
+function pl_get_sections()
+{
+	global $pl_section_factory;
+	return $pl_section_factory->sections;
 }
