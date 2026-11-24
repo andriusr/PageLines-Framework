@@ -5,6 +5,25 @@
 // ==============================
 
 /**
+ * Get all core option keys
+ * @since 2.4.7.1
+ *
+ * @return array
+ */
+function pl_option_keys()
+{
+	return array(
+		PAGELINES_SETTINGS,
+		PAGELINES_EXTENSION,
+		PAGELINES_ACCOUNT,
+		PAGELINES_SPECIAL,
+		PAGELINES_TEMPLATES,
+		PAGELINES_TEMPLATE_MAP,
+		'pl_section_desc_toggle',
+	);
+}
+
+/**
  *  Determines if on a foreign integration page
  *
  * @since 2.0.0
@@ -1038,21 +1057,15 @@ function pl_admin_is_page(){
  * @TODO document
  *
  */
-function pl_file_get_contents( $filename ) {
+function pl_file_get_contents( $filename )
+{
+	if ( !is_file( $filename ) )
+		return false;
 
-	if ( is_file( $filename ) ) {
-
-		$file = file( $filename, FILE_SKIP_EMPTY_LINES );
-		$out = '';
-		if( is_array( $file ) )
-			foreach( $file as $contents )
-				$out .= $contents;
-
-		if( $out )
-			return $out;
-		else
-			return false;
-	}
+	if ( is_array( $file = file( $filename ) ) )
+		return join( $file );
+	else
+		return false;
 }
 
 
@@ -1105,12 +1118,67 @@ function array_search_ext($arr, $search, $exact = true, $trav_keys = null)
  *
  * @link    http://www.pagelines.com/wiki/Pagelines_register_sidebar
  */
-function pagelines_register_sidebar( $args, $priorty = null ) {
+function pagelines_register_sidebar( $args, $priorty = null )
+{
+	if ( isset( $priorty ) )
+		_deprecated_argument( __FUNCTION__, '2.2' );
 
-	if( ! isset( $args['id'] ) && isset( $args['name'] ) ) {
-		$args['id'] = $args['name'];
+	register_sidebar( $args );
+}
+
+/**
+ * register_sidebar wrapper
+ * 
+ * Includes standard sidebar args
+ * Updates old index-key sidebars in the process
+ *
+ * @since	2.4.6
+ * 
+ * @param  [type] $args [description]
+ * @return [type]       [description]
+ */
+function pl_register_sidebar( $args )
+{
+	$base = pagelines_standard_sidebar( 'name', 'description' ); // defaults to merge with
+	$args = array_merge( $base, $args );
+
+	// migrate sidebars' widgets from assigned index key to declared id
+	if ( !empty( $args['id'] ) )
+	{
+		global $wp_registered_sidebars;
+		$i = count( $wp_registered_sidebars ) + 1;
+
+		pl_migrate_widgets( "sidebar-$i", $args['id'] );
 	}
 	register_sidebar( $args );
+}
+
+/**
+ * Migrate widgets from one sidebar to a new one
+ *
+ * @since	2.4.6
+ * 
+ * @param  string	$from	old registered index
+ * @param  string	$to		new registered index
+ * @return void
+ */
+function pl_migrate_widgets( $from, $to )
+{
+	$widgets = get_option( 'sidebars_widgets', array() );
+
+	// only migrate if destination does not exist
+	if ( isset( $widgets[ $from ] ) && !isset( $widgets[ $to ] ) )
+	{
+		$widgets[ $to ] = $widgets[ $from ];
+		unset( $widgets[ $from ] );
+		
+		update_option( 'sidebars_widgets', $widgets );
+				
+		// refresh globals & apply filters
+		global $_wp_sidebars_widgets;
+		$_wp_sidebars_widgets = $widgets;
+		wp_get_sidebars_widgets();
+	}
 }
 
 /**
@@ -1236,12 +1304,12 @@ function pl_get_uri( $full = true ) {
  *
  * @return bool
  */
-function is_pl_debug() {
-
+function is_pl_debug()
+{
 	if ( defined( 'PL_DEV' ) && PL_DEV )
 		return true;
-	if ( ploption( 'enable_debug' ) )
-		return true;
+
+	return ( ploption( 'enable_debug' ) );
 }
 
 /**
