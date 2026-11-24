@@ -11,6 +11,7 @@
  *
  */
 
+#[\AllowDynamicProperties]
 class PageLinesTemplateBuilder {
 
 

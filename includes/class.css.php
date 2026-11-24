@@ -10,6 +10,8 @@
  *  @since 4.0
  *
  */
+
+#[\AllowDynamicProperties]
 class PageLinesCSS {
 
 	/**
