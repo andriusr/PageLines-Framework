@@ -217,7 +217,11 @@ class PLPanel {
 
 		<div class="ohead mp_bar mp_footer ">
 			<div class="mp_bar_pad fix ">
-				<input type="hidden" name="_posttype" value="<?php echo $post_type; ?>" />
+				<?php
+				// array to string conversion
+				// unused!
+				/*<input type="hidden" name="_posttype" value="<?php echo $post_type; ?>" />*/
+				?>
 				<div class="superlink-wrap osave-wrap">
 					<input id="update" class="superlink osave" type="submit" value="<?php echo $save_text; ?>"  name="update" />
 				</div>
