@@ -18,5 +18,5 @@
  *
  * @todo Define version
  */
-
+error_reporting(error_reporting() & ~E_DEPRECATED);
 require_once(get_template_directory() . '/includes/init.php');
